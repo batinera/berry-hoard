@@ -1,0 +1,21 @@
+# Godot 4+
+.godot/
+
+# Export
+export_presets.cfg
+
+# Translations (generated)
+*.translation
+
+# Mono / C#
+.mono/
+data_*/
+mono_crash.*.json
+
+# Node (commitlint)
+node_modules/
+
+# OS / editor
+.DS_Store
+*.swp
+*~

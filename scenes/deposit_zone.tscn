@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://deposit001"]
+
+[ext_resource type="Script" path="res://scripts/deposit_zone.gd" id="1_dep"]
+
+[sub_resource type="BoxShape3D" id="BoxShape_dep"]
+size = Vector3(2.8, 2.0, 2.2)
+
+[sub_resource type="StandardMaterial3D" id="Mat_crate"]
+albedo_color = Color(0.55, 0.36, 0.18, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_crate"]
+size = Vector3(1.4, 0.9, 1.0)
+
+[node name="DepositZone" type="Area3D"]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("1_dep")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+shape = SubResource("BoxShape_dep")
+
+[node name="Crate" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+mesh = SubResource("BoxMesh_crate")
+surface_material_override/0 = SubResource("Mat_crate")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+text = "Caixa de entrega"
+font_size = 28
+outline_size = 6

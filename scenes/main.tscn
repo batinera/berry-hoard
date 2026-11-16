@@ -1,0 +1,163 @@
+[gd_scene load_steps=16 format=3 uid="uid://main001"]
+
+[ext_resource type="PackedScene" uid="uid://player001" path="res://scenes/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://hud001" path="res://scenes/hud.tscn" id="2_hud"]
+[ext_resource type="PackedScene" path="res://scenes/deposit_zone.tscn" id="5_deposit"]
+[ext_resource type="Script" path="res://scripts/berry_ocean.gd" id="6_ocean"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
+sky_top_color = Color(0.12, 0.13, 0.16, 1)
+sky_horizon_color = Color(0.18, 0.19, 0.22, 1)
+
+[sub_resource type="Sky" id="Sky_res"]
+sky_material = SubResource("SkyMat")
+
+[sub_resource type="Environment" id="Env_warehouse"]
+background_mode = 2
+sky = SubResource("Sky_res")
+ambient_light_source = 2
+ambient_light_color = Color(0.75, 0.78, 0.82, 1)
+ambient_light_energy = 0.65
+tonemap_mode = 2
+tonemap_exposure = 1.0
+glow_enabled = true
+glow_intensity = 0.45
+glow_bloom = 0.1
+fog_enabled = true
+fog_light_color = Color(0.55, 0.58, 0.62, 1)
+fog_density = 0.002
+
+[sub_resource type="StandardMaterial3D" id="Mat_floor"]
+albedo_color = Color(0.32, 0.34, 0.36, 1)
+roughness = 0.92
+metallic = 0.05
+
+[sub_resource type="StandardMaterial3D" id="Mat_wall"]
+albedo_color = Color(0.58, 0.6, 0.63, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Mat_pipe"]
+albedo_color = Color(0.78, 0.16, 0.12, 1)
+roughness = 0.55
+metallic = 0.35
+
+[sub_resource type="StandardMaterial3D" id="Mat_ceiling"]
+albedo_color = Color(0.22, 0.24, 0.28, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="Mat_light_panel"]
+albedo_color = Color(1, 0.98, 0.92, 1)
+emission_enabled = true
+emission = Color(1, 0.95, 0.85, 1)
+emission_energy_multiplier = 2.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+size = Vector3(54, 0.4, 70)
+
+[sub_resource type="BoxMesh" id="BoxMesh_chunk"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape_floor"]
+size = Vector3(54, 0.4, 70)
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Env_warehouse")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8, -0.3, 0.52, 0, 0.85, 0.52, -0.6, -0.42, 0.68, 2, 18, 4)
+light_color = Color(0.95, 0.92, 0.88, 1)
+light_energy = 0.85
+shadow_enabled = true
+
+[node name="FillWarm" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
+light_color = Color(1, 0.88, 0.72, 1)
+light_energy = 1.25
+omni_range = 48.0
+
+[node name="Warehouse" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Warehouse"]
+collision_layer = 1
+
+[node name="Mesh" type="MeshInstance3D" parent="Warehouse/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = SubResource("Mat_floor")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Warehouse/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+shape = SubResource("BoxShape_floor")
+
+[node name="Ceiling" type="MeshInstance3D" parent="Warehouse"]
+transform = Transform3D(52, 0, 0, 0, 0.25, 0, 0, 0, 68, 0, 6.2, 0)
+mesh = SubResource("BoxMesh_chunk")
+surface_material_override/0 = SubResource("Mat_ceiling")
+
+[node name="WallBack" type="MeshInstance3D" parent="Warehouse"]
+transform = Transform3D(52, 0, 0, 0, 6.5, 0, 0, 0, 0.4, 0, 3.1, -34.8)
+mesh = SubResource("BoxMesh_chunk")
+surface_material_override/0 = SubResource("Mat_wall")
+
+[node name="WallLeft" type="MeshInstance3D" parent="Warehouse"]
+transform = Transform3D(0.4, 0, 0, 0, 6.5, 0, 0, 0, 68, -26.5, 3.1, 0)
+mesh = SubResource("BoxMesh_chunk")
+surface_material_override/0 = SubResource("Mat_wall")
+
+[node name="WallRight" type="MeshInstance3D" parent="Warehouse"]
+transform = Transform3D(0.4, 0, 0, 0, 6.5, 0, 0, 0, 68, 26.5, 3.1, 0)
+mesh = SubResource("BoxMesh_chunk")
+surface_material_override/0 = SubResource("Mat_wall")
+
+[node name="WallFront" type="MeshInstance3D" parent="Warehouse"]
+transform = Transform3D(52, 0, 0, 0, 6.5, 0, 0, 0, 0.4, 0, 3.1, 34.8)
+mesh = SubResource("BoxMesh_chunk")
+surface_material_override/0 = SubResource("Mat_wall")
+
+[node name="PipeBack" type="MeshInstance3D" parent="Warehouse"]
+transform = Transform3D(50, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 0, 4.2, -34.2)
+mesh = SubResource("BoxMesh_chunk")
+surface_material_override/0 = SubResource("Mat_pipe")
+
+[node name="PipeLeft" type="MeshInstance3D" parent="Warehouse"]
+transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 64, -26.0, 4.2, 0)
+mesh = SubResource("BoxMesh_chunk")
+surface_material_override/0 = SubResource("Mat_pipe")
+
+[node name="PipeRight" type="MeshInstance3D" parent="Warehouse"]
+transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 64, 26.0, 4.2, 0)
+mesh = SubResource("BoxMesh_chunk")
+surface_material_override/0 = SubResource("Mat_pipe")
+
+[node name="PipeFront" type="MeshInstance3D" parent="Warehouse"]
+transform = Transform3D(50, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 0, 4.2, 34.2)
+mesh = SubResource("BoxMesh_chunk")
+surface_material_override/0 = SubResource("Mat_pipe")
+
+[node name="LightGridA" type="MeshInstance3D" parent="Warehouse"]
+transform = Transform3D(16, 0, 0, 0, 0.08, 0, 0, 0, 2.5, -12, 5.95, -8)
+mesh = SubResource("BoxMesh_chunk")
+surface_material_override/0 = SubResource("Mat_light_panel")
+
+[node name="LightGridB" type="MeshInstance3D" parent="Warehouse"]
+transform = Transform3D(16, 0, 0, 0, 0.08, 0, 0, 0, 2.5, 12, 5.95, -8)
+mesh = SubResource("BoxMesh_chunk")
+surface_material_override/0 = SubResource("Mat_light_panel")
+
+[node name="LightGridC" type="MeshInstance3D" parent="Warehouse"]
+transform = Transform3D(16, 0, 0, 0, 0.08, 0, 0, 0, 2.5, 0, 5.95, 10)
+mesh = SubResource("BoxMesh_chunk")
+surface_material_override/0 = SubResource("Mat_light_panel")
+
+[node name="BerryOcean" type="Node3D" parent="Warehouse"]
+script = ExtResource("6_ocean")
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 4)
+
+[node name="DepositZone" parent="." instance=ExtResource("5_deposit")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.0, 0, -30.0)
+
+[node name="HUD" parent="." instance=ExtResource("2_hud")]

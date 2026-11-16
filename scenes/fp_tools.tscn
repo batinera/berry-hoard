@@ -1,0 +1,140 @@
+[gd_scene load_steps=11 format=3 uid="uid://fptools001"]
+
+[ext_resource type="Script" path="res://scripts/first_person_tools.gd" id="1_tools"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_skin"]
+albedo_color = Color(0.91, 0.74, 0.62, 1)
+roughness = 0.55
+
+[sub_resource type="StandardMaterial3D" id="Mat_wood"]
+albedo_color = Color(0.45, 0.28, 0.14, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_metal"]
+albedo_color = Color(0.82, 0.84, 0.88, 1)
+metallic = 0.9
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="Mat_orange"]
+albedo_color = Color(0.95, 0.45, 0.15, 1)
+metallic = 0.4
+roughness = 0.45
+
+[sub_resource type="StandardMaterial3D" id="Mat_magnet_r"]
+albedo_color = Color(0.92, 0.16, 0.12, 1)
+emission_enabled = true
+emission = Color(0.45, 0.05, 0.05, 1)
+emission_energy_multiplier = 0.4
+
+[sub_resource type="StandardMaterial3D" id="Mat_magnet_b"]
+albedo_color = Color(0.12, 0.38, 0.95, 1)
+emission_enabled = true
+emission = Color(0.05, 0.15, 0.55, 1)
+emission_energy_multiplier = 0.4
+
+[sub_resource type="StandardMaterial3D" id="Mat_glow"]
+transparency = 1
+albedo_color = Color(0.45, 0.75, 1, 0.35)
+emission_enabled = true
+emission = Color(0.35, 0.65, 1.0, 1)
+emission_energy_multiplier = 2.5
+
+[sub_resource type="BoxMesh" id="Box_mesh"]
+size = Vector3(0.16, 0.1, 0.2)
+
+[sub_resource type="BoxMesh" id="Box_finger"]
+size = Vector3(0.04, 0.04, 0.11)
+
+[node name="FPTools" type="Node3D"]
+script = ExtResource("1_tools")
+
+[node name="Hand" type="Node3D" parent="."]
+
+[node name="Arm" type="MeshInstance3D" parent="Hand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.08, -0.15)
+mesh = SubResource("Box_mesh")
+surface_material_override/0 = SubResource("Mat_skin")
+
+[node name="Palm" type="MeshInstance3D" parent="Hand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0.03, -0.04)
+mesh = SubResource("Box_mesh")
+surface_material_override/0 = SubResource("Mat_skin")
+
+[node name="Finger1" type="MeshInstance3D" parent="Hand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.07, 0.04, -0.14)
+mesh = SubResource("Box_finger")
+surface_material_override/0 = SubResource("Mat_skin")
+
+[node name="Finger2" type="MeshInstance3D" parent="Hand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.02, 0.04, -0.16)
+mesh = SubResource("Box_finger")
+surface_material_override/0 = SubResource("Mat_skin")
+
+[node name="Finger3" type="MeshInstance3D" parent="Hand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.04, 0.04, -0.16)
+mesh = SubResource("Box_finger")
+surface_material_override/0 = SubResource("Mat_skin")
+
+[node name="Finger4" type="MeshInstance3D" parent="Hand"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08, 0.03, -0.14)
+mesh = SubResource("Box_finger")
+surface_material_override/0 = SubResource("Mat_skin")
+
+[node name="Harvester" type="Node3D" parent="."]
+visible = false
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 0.05, -0.05, 0)
+
+[node name="Handle" type="MeshInstance3D" parent="Harvester"]
+transform = Transform3D(0.14, 0, 0, 0, 0.14, 0, 0, 0, 0.65, 0.06, -0.06, -0.22)
+mesh = SubResource("Box_mesh")
+surface_material_override/0 = SubResource("Mat_wood")
+
+[node name="Head" type="Node3D" parent="Harvester"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -0.48)
+
+[node name="Ring" type="MeshInstance3D" parent="Harvester/Head"]
+transform = Transform3D(1.6, 0, 0, 0, 0.35, 0, 0, 0, 1.6, 0, 0, 0)
+mesh = SubResource("Box_mesh")
+surface_material_override/0 = SubResource("Mat_orange")
+
+[node name="ClawL" type="MeshInstance3D" parent="Harvester/Head"]
+transform = Transform3D(0.18, 0, 0, 0, 0.35, 0, 0, 0, 0.35, -0.22, -0.05, 0.12)
+mesh = SubResource("Box_finger")
+surface_material_override/0 = SubResource("Mat_metal")
+
+[node name="ClawR" type="MeshInstance3D" parent="Harvester/Head"]
+transform = Transform3D(0.18, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0.22, -0.05, 0.12)
+mesh = SubResource("Box_finger")
+surface_material_override/0 = SubResource("Mat_metal")
+
+[node name="Magnet" type="Node3D" parent="."]
+visible = false
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, 0.08, -0.02, 0)
+
+[node name="Core" type="Node3D" parent="Magnet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, -0.32)
+
+[node name="Handle" type="MeshInstance3D" parent="Magnet"]
+transform = Transform3D(0.12, 0, 0, 0, 0.55, 0, 0, 0, 0.12, 0.14, -0.02, -0.1)
+mesh = SubResource("Box_mesh")
+surface_material_override/0 = SubResource("Mat_wood")
+
+[node name="PoleL" type="MeshInstance3D" parent="Magnet/Core"]
+transform = Transform3D(0.22, 0, 0, 0, 0.45, 0, 0, 0, 0.26, -0.18, 0.05, -0.05)
+mesh = SubResource("Box_mesh")
+surface_material_override/0 = SubResource("Mat_magnet_r")
+
+[node name="PoleR" type="MeshInstance3D" parent="Magnet/Core"]
+transform = Transform3D(0.22, 0, 0, 0, 0.45, 0, 0, 0, 0.26, 0.18, 0.05, -0.05)
+mesh = SubResource("Box_mesh")
+surface_material_override/0 = SubResource("Mat_magnet_b")
+
+[node name="Bridge" type="MeshInstance3D" parent="Magnet/Core"]
+transform = Transform3D(0.42, 0, 0, 0, 0.12, 0, 0, 0, 0.22, 0, 0.3, -0.05)
+mesh = SubResource("Box_mesh")
+surface_material_override/0 = SubResource("Mat_metal")
+
+[node name="Glow" type="MeshInstance3D" parent="Magnet/Core"]
+visible = false
+transform = Transform3D(0.5, 0, 0, 0, 0.22, 0, 0, 0, 0.35, 0, 0.12, -0.05)
+mesh = SubResource("Box_mesh")
+surface_material_override/0 = SubResource("Mat_glow")
